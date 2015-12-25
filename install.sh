@@ -101,6 +101,32 @@ else
 fi
 
 sleep 0.1
+# Before make .vimrc, make sure you have a ctags.
+echo -n "Check ctags installed ... "
+if [ $(command -v ctags) ];
+then
+	echo [ok]
+else
+	echo ""
+	echo "  You have to install ctags."
+	echo -n "  Do you want to continue? [y/n] "
+	read ANSWER
+	case $ANSWER in
+		y|Y)
+			sudo apt-get install ctags
+			if [ $? -ne 0 ];
+			then
+				echo "  Abort."
+				exit 1
+			fi
+			;;
+		*)
+			echo "  Abort."
+			exit 1;;
+	esac
+fi
+
+sleep 0.1
 # Check git installed.
 echo -n "Check git installed ... "
 if [ $(command -v git) ];
