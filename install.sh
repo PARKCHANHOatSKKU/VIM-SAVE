@@ -585,7 +585,7 @@ sleep 0.1
 echo "BundleInstall ... "
 echo "  Now all downloads are finished. Stay here and check out"
 echo "  all plugins are installed well. [Click any]"
-read ANSWER
+read -n1 ANSWER
 vim +BundleInstall +qall
 
 echo "Install TEAM SAVE's vimrc v0.1 finished!"
