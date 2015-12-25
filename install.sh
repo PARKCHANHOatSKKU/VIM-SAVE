@@ -61,23 +61,9 @@ else
 	read ANSWER
 	case $ANSWER in
 		y|Y)
-			sudo apt-get --assume-yes install python-dev >/dev/null 2>&1 &
-			PID=$!
-			echo -n "  Download python-dev ...  "
-			while [ -d "/proc/$PID" ];
-			do
-				for s in / - \\ \|; do 
-					printf "\b$s";
-					sleep .1;
-				done
-			done
-			# Check wget return value
-			if [ $? -eq 0 ];
+			sudo apt-get install python-dev
+			if [ $? -ne 0 ];
 			then
-				printf "\b[ok]\n"
-			else
-				echo ""
-				echo "  Download python-dev(apt-get) failed."
 				echo "  Abort."
 				exit 1
 			fi
@@ -96,10 +82,22 @@ then
 	echo [ok]
 else
 	echo ""
-	echo "  Install cmake first."
-	echo "  sudo apt-get install cmake"
-	echo "  Abort."
-	exit 1
+	echo "  You have to install python-dev."
+	echo -n "  Do you want to continue? [y/n] "
+	read ANSWER
+	case $ANSWER in
+		y|Y)
+			sudo apt-get install cmake
+			if [ $? -ne 0 ];
+			then
+				echo "  Abort."
+				exit 1
+			fi
+			;;
+		*)
+			echo "  Abort."
+			exit 1;;
+	esac
 fi
 
 sleep 0.1
@@ -110,10 +108,22 @@ then
 	echo [ok]
 else
 	echo ""
-	echo "  Install git first."
-	echo "  sudo apt-get install git"
-	echo "  Abort."
-	exit 1
+	echo "  You have to install git."
+	echo -n "  Do you want to continue? [y/n] "
+	read ANSWER
+	case $ANSWER in
+		y|Y)
+			sudo apt-get install git
+			if [ $? -ne 0 ];
+			then
+				echo "  Abort."
+				exit 1
+			fi
+			;;
+		*)
+			echo "  Abort."
+			exit 1;;
+	esac
 fi
 
 sleep 0.1
@@ -124,9 +134,22 @@ then
 	echo [ok]
 else
 	echo ""
-	echo "  Install pip first."
-	echo "  Abort."
-	exit 1
+	echo "  You have to install python-pip."
+	echo -n "  Do you want to continue? [y/n] "
+	read ANSWER
+	case $ANSWER in
+		y|Y)
+			sudo apt-get install python-pip
+			if [ $? -ne 0 ];
+			then
+				echo "  Abort."
+				exit 1
+			fi
+			;;
+		*)
+			echo "  Abort."
+			exit 1;;
+	esac
 fi
 
 sleep 0.1
@@ -136,11 +159,23 @@ if [ $(echo $?) -eq 0 ];
 then
 	echo [ok]
 else
-	echo ""
-	echo "  Install jedi."
-	echo "  pip install jedi"
-	echo "  Abort."
-	exit 1
+echo ""
+	echo "  You have to install jedi."
+	echo -n "  Do you want to continue? [y/n] "
+	read ANSWER
+	case $ANSWER in
+		y|Y)
+			pip install jedi
+			if [ $? -ne 0 ];
+			then
+				echo "  Abort."
+				exit 1
+			fi
+			;;
+		*)
+			echo "  Abort."
+			exit 1;;
+	esac
 fi
 
 sleep 0.1
@@ -150,11 +185,23 @@ if [ $(command -v vim) ];
 then
 	echo [ok]
 else
-	echo ""
-	echo "  Install vim first."
-	echo "  sudo apt-get install vim"
-	echo "  Abort."
-	exit 1
+echo ""
+	echo "  You have to install vim."
+	echo -n "  Do you want to continue? [y/n] "
+	read ANSWER
+	case $ANSWER in
+		y|Y)
+			sudo apt-get install vim
+			if [ $? -ne 0 ];
+			then
+				echo "  Abort."
+				exit 1
+			fi
+			;;
+		*)
+			echo "  Abort."
+			exit 1;;
+	esac
 fi
 #$(command -v vim >/dev/null 2>&1 || { echo >&2 "  Install vim first."; echo >&2 "  Abort."; exit 1; })
 
@@ -329,6 +376,30 @@ then
 	esac
 else
 	echo "[ok]"
+	$(mkdir -p $HOME/.vim/bundle)
+
+	sleep 0.1
+	# Downloads vundle
+	echo -n "Download vundle ...  "
+	git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim >/dev/null 2>&1 &
+	PID=$!
+	while [ -d "/proc/$PID" ];
+	do
+		for s in / - \\ \|; do 
+			printf "\b$s";
+			sleep .1;
+		done
+	done
+	# Check wget return value
+	if [ $? -eq 0 ];
+	then
+		printf "\b[ok]\n"
+	else
+		echo ""
+		echo "  Download vundle(git) failed."
+		echo "  Abort."
+		exit 1
+	fi
 fi
 
 sleep 0.1
@@ -416,6 +487,7 @@ then
 else
 	sleep 0.1
 	# Downloads YouCompleteMe
+	echo ""
 	echo -n "Download plugin 'YouCompleteMe' ...  "
 	git clone https://github.com/Valloric/YouCompleteMe.git $HOME/.vim/bundle/YouCompleteMe >/dev/null 2>&1 &
 	PID=$!
