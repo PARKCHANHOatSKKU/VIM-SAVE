@@ -61,7 +61,7 @@ else
 	read ANSWER
 	case $ANSWER in
 		y|Y)
-			sudo apt-get install python-dev --assume-yes >/dev/null 2>&1 &
+			sudo apt-get --assume-yes install python-dev >/dev/null 2>&1 &
 			PID=$!
 			echo -n "  Download python-dev ...  "
 			while [ -d "/proc/$PID" ];
