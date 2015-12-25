@@ -198,22 +198,21 @@ else
 					sleep .1;
 				done
 			done
+			# Check wget return value
+			if [ $? -eq 0 ];
+			then
+				printf "\b[ok]\n"
+			else
+				echo ""
+				echo "  Download vundle(wget) failed."
+				echo "  Abort."
+				exit 1
+			fi
 			;;
 		*)
 			echo "  Abort."
 			exit 1;;
 	esac
-fi
-
-# Check wget return value
-if [ $? -eq 0 ];
-then
-	printf "\b[ok]\n"
-else
-	echo ""
-	echo "  Download vundle(wget) failed."
-	echo "  Abort."
-	exit 1
 fi
 
 sleep 0.1
@@ -268,112 +267,196 @@ echo -n "Check old config ... "
 if [ -d "$HOME/.vim" ] && [ -d "$HOME/.vim/bundle" ];
 then
 	echo ""
-	echo "  You already have your own Vundle and plugins."
+	echo "  You already have your own vundle."
 	echo -n "  Do you want to remove it? [y/n] "
 	read ANSWER
 	case $ANSWER in
 		y|Y)
-			$(rm -rf $HOME/.vim/bundle);;
+			$(rm -rf $HOME/.vim/bundle)
+			$(mkdir -p $HOME/.vim/bundle)
+
+			sleep 0.1
+			# Downloads vundle
+			echo -n "Download vundle ...  "
+			git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/vundle >/dev/null 2>&1 &
+			PID=$!
+			while [ -d "/proc/$PID" ];
+			do
+				for s in / - \\ \|; do 
+					printf "\b$s";
+					sleep .1;
+				done
+			done
+			# Check wget return value
+			if [ $? -eq 0 ];
+			then
+				printf "\b[ok]\n"
+			else
+				echo ""
+				echo "  Download vundle(git) failed."
+				echo "  Abort."
+				exit 1
+			fi
+			;;
 		*)
-			echo ""
-			echo "  Abort."
-			exit 1;;
+			;;
 	esac
 else
 	echo "[ok]"
 fi
-$(mkdir -p $HOME/.vim/bundle)
 
 sleep 0.1
-# Downloads vundle
-echo -n "Download vundle ...  "
-git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/vundle >/dev/null 2>&1 &
-PID=$!
-while [ -d "/proc/$PID" ];
-do
-	for s in / - \\ \|; do 
-		printf "\b$s";
-		sleep .1;
-	done
-done
-# Check wget return value
-if [ $? -eq 0 ];
+echo -n "Check YouCompleteMe installed ... "
+if [ -d "$HOME/.vim/bundle/YouCompleteMe" ];
 then
-	printf "\b[ok]\n"
-else
 	echo ""
-	echo "  Download vundle(git) failed."
-	echo "  Abort."
-	exit 1
+	echo -n "  Do you want to remove old YouCompleteMe? [y/n] "
+	read ANSWER
+	case $ANSWER in
+		y|Y)
+			$(rm -rf $HOME/.vim/bundle/YouCompleteMe)
+			sleep 0.1
+			# Downloads YouCompleteMe
+			echo -n "Download plugin 'YouCompleteMe' ...  "
+			git clone https://github.com/Valloric/YouCompleteMe.git $HOME/.vim/bundle/YouCompleteMe >/dev/null 2>&1 &
+			PID=$!
+			while [ -d "/proc/$PID" ];
+			do
+				for s in / - \\ \|; do 
+					printf "\b$s";
+					sleep .1;
+				done
+			done
+
+			# Check wget return value
+			if [ $? -eq 0 ];
+			then
+				printf "\b[ok]\n"
+			else
+				echo ""
+				echo "  Download YouCompleteMe(git) failed."
+				echo "  Abort."
+				exit 1
+			fi
+
+			sleep 0.1
+			# Install YouCompleteMe
+			echo -n "Install YouCompleteMe submodule ...  "
+			git -C $HOME/.vim/bundle/YouCompleteMe submodule update --init --recursive >/dev/null 2>&1 &
+			PID=$!
+			while [ -d "/proc/$PID" ];
+			do
+				for s in / - \\ \|; do 
+					printf "\b$s";
+					sleep .1;
+				done
+			done
+			if [ $? -eq 0 ];
+			then
+				printf "\b[ok]\n"
+			else
+				echo ""
+				echo "  Install YouCompleteMe submodule failed."
+				echo "  Abort"
+				exit 1
+			fi
+
+			sleep 0.1
+			# Compile YouCompleteMe
+			echo -n "Compile YouCompleteMe ...  "
+			$HOME/.vim/bundle/YouCompleteMe/install.py --clang-completer >/dev/null 2>&1 &
+			PID=$!
+			while [ -d "/proc/$PID" ];
+			do
+				for s in / - \\ \|; do 
+					printf "\b$s";
+					sleep .1;
+				done
+			done
+			if [ $? -eq 0 ];
+			then
+				printf "\b[ok]\n"
+			else
+				echo ""
+				echo "  Compile YouCompleteMe failed."
+				echo "  Abort"
+				exit 1
+			fi
+			;;
+		*)
+			;;
+	esac
+else
+	sleep 0.1
+	# Downloads YouCompleteMe
+	echo -n "Download plugin 'YouCompleteMe' ...  "
+	git clone https://github.com/Valloric/YouCompleteMe.git $HOME/.vim/bundle/YouCompleteMe >/dev/null 2>&1 &
+	PID=$!
+	while [ -d "/proc/$PID" ];
+	do
+		for s in / - \\ \|; do 
+			printf "\b$s";
+			sleep .1;
+		done
+	done
+
+	# Check wget return value
+	if [ $? -eq 0 ];
+	then
+		printf "\b[ok]\n"
+	else
+		echo ""
+		echo "  Download YouCompleteMe(git) failed."
+		echo "  Abort."
+		exit 1
+	fi
+
+	sleep 0.1
+	# Install YouCompleteMe
+	echo -n "Install YouCompleteMe submodule ...  "
+	git -C $HOME/.vim/bundle/YouCompleteMe submodule update --init --recursive >/dev/null 2>&1 &
+	PID=$!
+	while [ -d "/proc/$PID" ];
+	do
+		for s in / - \\ \|; do 
+			printf "\b$s";
+			sleep .1;
+		done
+	done
+	if [ $? -eq 0 ];
+	then
+		printf "\b[ok]\n"
+	else
+		echo ""
+		echo "  Install YouCompleteMe submodule failed."
+		echo "  Abort"
+		exit 1
+	fi
+
+	sleep 0.1
+	# Compile YouCompleteMe
+	echo -n "Compile YouCompleteMe ...  "
+	$HOME/.vim/bundle/YouCompleteMe/install.py --clang-completer >/dev/null 2>&1 &
+	PID=$!
+	while [ -d "/proc/$PID" ];
+	do
+		for s in / - \\ \|; do 
+			printf "\b$s";
+			sleep .1;
+		done
+	done
+	if [ $? -eq 0 ];
+	then
+		printf "\b[ok]\n"
+	else
+		echo ""
+		echo "  Compile YouCompleteMe failed."
+		echo "  Abort"
+		exit 1
+	fi
+	echo "[ok]"
 fi
 
-sleep 0.1
-# Downloads YouCompleteMe
-echo -n "Download plugin 'YouCompleteMe' ...  "
-git clone https://github.com/Valloric/YouCompleteMe.git $HOME/.vim/bundle/YouCompleteMe >/dev/null 2>&1 &
-PID=$!
-while [ -d "/proc/$PID" ];
-do
-	for s in / - \\ \|; do 
-		printf "\b$s";
-		sleep .1;
-	done
-done
-
-# Check wget return value
-if [ $? -eq 0 ];
-then
-	printf "\b[ok]\n"
-else
-	echo ""
-	echo "  Download YouCompleteMe(git) failed."
-	echo "  Abort."
-	exit 1
-fi
-
-sleep 0.1
-# Install YouCompleteMe
-echo -n "Install YouCompleteMe submodule ...  "
-git -C $HOME/.vim/bundle/YouCompleteMe submodule update --init --recursive >/dev/null 2>&1 &
-PID=$!
-while [ -d "/proc/$PID" ];
-do
-	for s in / - \\ \|; do 
-		printf "\b$s";
-		sleep .1;
-	done
-done
-if [ $? -eq 0 ];
-then
-	printf "\b[ok]\n"
-else
-	echo ""
-	echo "  Install YouCompleteMe submodule failed."
-	echo "  Abort"
-	exit 1
-fi
-
-sleep 0.1
-# Compile YouCompleteMe
-echo -n "Compile YouCompleteMe ...  "
-$HOME/.vim/bundle/YouCompleteMe/install.py --clang-completer >/dev/null 2>&1 &
-PID=$!
-while [ -d "/proc/$PID" ];
-do
-	for s in / - \\ \|; do 
-		printf "\b$s";
-		sleep .1;
-	done
-done
-if [ $? -eq 0 ];
-then
-	printf "\b[ok]\n"
-else
-	echo ""
-	echo "  Compile YouCompleteMe failed."
-	echo "  Abort"
-	exit 1
-fi
 
 sleep 0.1
 echo "BundleInstall ... "
@@ -381,3 +464,5 @@ echo "  Now all downloads is finished. Stay here and check out"
 echo "  all plugins are installed well. [Click any]"
 read ANSWER
 vim +BundleInstall +qall
+
+echo "Install TEAM SAVE's vimrc v0.1 finished!"
