@@ -267,8 +267,8 @@ echo -n "Check old config ... "
 if [ -d "$HOME/.vim" ] && [ -d "$HOME/.vim/bundle" ];
 then
 	echo ""
-	echo "  You already have your own vundle."
-	echo -n "  Do you want to remove it? [y/n] "
+	echo "  You already have your own vundle and plugins."
+	echo -n "  Do you want to remove all(Clean Install)? [y/n] "
 	read ANSWER
 	case $ANSWER in
 		y|Y)
@@ -310,6 +310,7 @@ echo -n "Check YouCompleteMe installed ... "
 if [ -d "$HOME/.vim/bundle/YouCompleteMe" ];
 then
 	echo ""
+	echo "  You already have your own YouCompleteMe."
 	echo -n "  Do you want to remove old YouCompleteMe? [y/n] "
 	read ANSWER
 	case $ANSWER in
@@ -454,15 +455,14 @@ else
 		echo "  Abort"
 		exit 1
 	fi
-	echo "[ok]"
 fi
-
 
 sleep 0.1
 echo "BundleInstall ... "
-echo "  Now all downloads is finished. Stay here and check out"
+echo "  Now all downloads are finished. Stay here and check out"
 echo "  all plugins are installed well. [Click any]"
 read ANSWER
 vim +BundleInstall +qall
 
 echo "Install TEAM SAVE's vimrc v0.1 finished!"
+echo ""
