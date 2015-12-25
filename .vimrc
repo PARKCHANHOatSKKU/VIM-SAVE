@@ -72,14 +72,13 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 Bundle 'gmarik/vundle'
-Bundle 'git://git.wincent.com/command-t.git'
 
 "Plugin
-Plugin 'Conque-Shell'
-Plugin 'The-NERD-tree'
+Plugin 'wincent/command-t'
+Plugin 'lrvick/Conque-Shell'
+Plugin 'scrooloose/nerdtree'
 Plugin 'taglist-plus'
 Plugin 'SrcExpl'
-Plugin 'matchparenpp'
 Plugin 'taketwo/vim-ros'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'SirVer/ultisnips'
