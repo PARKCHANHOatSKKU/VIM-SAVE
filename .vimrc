@@ -69,11 +69,11 @@ set t_Co=256
 "plugin
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#rc()
-Bundle 'gmarik/vundle'
 
 "Plugin
+Plugin 'gmarik/Vundle.vim'
 Plugin 'wincent/command-t'
 Plugin 'lrvick/Conque-Shell'
 Plugin 'scrooloose/nerdtree'
