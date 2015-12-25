@@ -56,10 +56,36 @@ then
 	echo [ok]
 else
 	echo ""
-	echo "  Install python-dev."
-	echo "  sudo apt-get install python-dev"
-	echo "  Abort."
-	exit 1
+	echo "  You have to install python-dev."
+	echo -n "  Do you want to continue? [y/n] "
+	read ANSWER
+	case $ANSWER in
+		y|Y)
+			sudo apt-get install python-dev >/dev/null 2>&1 &
+			PID=$!
+			echo -n "  Download python-dev ...  "
+			while [ -d "/proc/$PID" ];
+			do
+				for s in / - \\ \|; do 
+					printf "\b$s";
+					sleep .1;
+				done
+			done
+			# Check wget return value
+			if [ $? -eq 0 ];
+			then
+				printf "\b[ok]\n"
+			else
+				echo ""
+				echo "  Download python-dev(apt-get) failed."
+				echo "  Abort."
+				exit 1
+			fi
+			;;
+		*)
+			echo "  Abort."
+			exit 1;;
+	esac
 fi
 
 sleep 0.1
