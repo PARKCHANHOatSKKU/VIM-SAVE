@@ -278,7 +278,7 @@ then
 			sleep 0.1
 			# Downloads vundle
 			echo -n "Download vundle ...  "
-			git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/vundle >/dev/null 2>&1 &
+			git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim >/dev/null 2>&1 &
 			PID=$!
 			while [ -d "/proc/$PID" ];
 			do
