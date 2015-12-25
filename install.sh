@@ -82,7 +82,7 @@ then
 	echo [ok]
 else
 	echo ""
-	echo "  You have to install python-dev."
+	echo "  You have to install cmake."
 	echo -n "  Do you want to continue? [y/n] "
 	read ANSWER
 	case $ANSWER in
@@ -165,7 +165,7 @@ echo ""
 	read ANSWER
 	case $ANSWER in
 		y|Y)
-			pip install jedi
+			sudo pip install jedi
 			if [ $? -ne 0 ];
 			then
 				echo "  Abort."
