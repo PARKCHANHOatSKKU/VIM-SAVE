@@ -1,4 +1,4 @@
-```
+﻿```
                            ***||**                           
 						 *||||||||||*                        
 					   *||||||||||||||                       
@@ -32,6 +32,16 @@
 
 ## VIM-SAVE
 Write program description here.
+
+##issues
+* YCM이 메모리가 작은 디바이스에서 Internal compile error를 발생시킴  
+->wiki에서 해결방법 확인  
+
+* python3 에서의 작업환경 구축 미완성
+->수정 중…
+
+* cpp의 YCM 버그
+->수정 중…  
 
 ## Related pages
 AMLab: [http://dasan.skku.edu/~amlab/](http://dasan.skku.edu/~amlab/)  
